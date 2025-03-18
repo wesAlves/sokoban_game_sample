@@ -1,8 +1,11 @@
+import sys
+
 import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from game.CONSTANTS import FONT_MENU, WHITE, MENU_BG_0, WIN_HEIGHT, WIN_WIDTH
+from game.CONSTANTS import FONT_MENU, WHITE, PLAYER
+from game.Player import Player
 
 
 class Level:
@@ -10,10 +13,25 @@ class Level:
         self.window = window
         self.name = name
         self.game_mode = game_mode
+        self.entity_list = []
+
+        self.player = Player(PLAYER[0], (32, 32), 'Player')
+        self.entity_list.append(self.player)
 
     def run(self):
         while True:
             self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))
+
+            for entity in self.entity_list:
+                self.window.blit(source=entity.surf, dest=entity.rect)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+
+                    if event.type == pygame.KEYDOWN:
+                        self.player.move()
 
             pygame.display.flip()
 
