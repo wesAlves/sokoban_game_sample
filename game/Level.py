@@ -21,6 +21,7 @@ class Level:
         self.level_mtx = LEVELS_MTX.LEVEL_1
         self.player_level = self.level_mtx
         self.player = ""
+        self.prev_element = ""
         # self.player = Player(PLAYER[0], (0, 0), 'Player')
         # self.entity_list.append(self.player)
         # self.base_floor_tile = Floor('base')
@@ -57,21 +58,28 @@ class Level:
 
                     # get player position in all directions
                     player_pos = self.player.rect
+                    x = int(self.player.rect.left / 64)
+                    y = int(self.player.rect.top / 64)
 
                     if pressed_key[pygame.K_UP]:
                         if player_pos.top > 64:
-                            self.player.rect.top = player_pos.top - 64
+                            # self.player.rect.top = player_pos.top - 64
+                            self.verify_valid_move(x, y, x, y - 1)
+
                     if pressed_key[pygame.K_DOWN]:
                         if player_pos.top < 640:
-                            self.player.rect.top = player_pos.top + 64
+                            # self.player.rect.top = player_pos.top + 64
+                            self.verify_valid_move(x, y, x, y + 1)
 
                     if pressed_key[pygame.K_RIGHT]:
                         if player_pos.left < 640 - 128:
-                            self.player.rect.left = player_pos.left + 64
+                            # self.player.rect.left = player_pos.left + 64
+                            self.verify_valid_move(x, y, x + 1, y)
 
                     if pressed_key[pygame.K_LEFT]:
                         if player_pos.left > 64:
-                            self.player.rect.left = player_pos.left - 64
+                            # self.player.rect.left = player_pos.left - 64
+                            self.verify_valid_move(x, y, x - 1, y)
 
                         # verify if is a valid move
                         # update the matix if so
@@ -87,8 +95,9 @@ class Level:
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
         self.window.blit(source=text_surf, dest=text_rect)
 
-    def set_game_mtx(self):
-        for y, row in enumerate(self.level_mtx):
+    def set_game_mtx(self, mtx=None):
+        level_mtx = mtx if mtx else self.level_mtx
+        for y, row in enumerate(level_mtx):
             for x, tile in enumerate(row):
                 f = Floor('regular', FLOOR[0][0], position=(x * 64, y * 64))
                 self.entity_list.append(f)
@@ -139,3 +148,44 @@ class Level:
                     print('positioning player')
                     p.rect.left = x * 64
                     p.rect.top = y * 64
+
+    def verify_valid_move(self, from_x=0, from_y=0, to_x=0, to_y=0):
+        player_pos = self.player_level[from_y][from_x]
+        desire_pos = self.player_level[to_y][to_x]
+        # check all directions
+        # check if is empty space or box or box place
+
+        if desire_pos == "" or desire_pos == "bm" or desire_pos == "bp":
+            print('can move')
+            self.player_level[to_y][to_x] = player_pos
+
+            if desire_pos is "bp":
+                self.prev_element = desire_pos
+                self.player_level[from_y][from_x] = ""
+            elif desire_pos is "bm":
+                self.player_level[from_y][from_x] = ""
+                if from_y < to_y:
+                    self.player_level[to_y + 1][to_x] = desire_pos
+                elif from_y > to_y:
+                    self.player_level[to_y - 1][to_x] = desire_pos
+
+                elif from_x < to_x:
+                    self.player_level[to_y][to_x + 1] = desire_pos
+                else:
+                    self.player_level[to_y][to_x - 1] = desire_pos
+
+                # self.player_level[to_x][to_y]
+            else:
+                self.player_level[from_y][from_x] = self.prev_element
+                self.prev_element = ""
+
+            match desire_pos:
+                case 'bm':
+                    pass
+                case 'bp':
+                    pass
+
+            self.set_game_mtx(self.player_level)
+
+        else:
+            print('can not move')
