@@ -19,6 +19,7 @@ class Level:
         self.game_mode = game_mode
         self.entity_list = []
         self.level_mtx = LEVELS_MTX.LEVEL_1
+        self.player = ""
         # self.player = Player(PLAYER[0], (0, 0), 'Player')
         # self.entity_list.append(self.player)
         # self.base_floor_tile = Floor('base')
@@ -26,6 +27,45 @@ class Level:
         # self.entity_list.append(self.f)
 
     def run(self):
+        self.set_game_mtx()
+
+        while True:
+            self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))
+
+            for entity in self.entity_list:
+                self.window.blit(source=entity.surf, dest=entity.rect)
+            # 
+
+            for event in pygame.event.get():
+                pressed_key = pygame.key.get_pressed()
+
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if pressed_key[pygame.K_ESCAPE]:
+                        pygame.quit()
+                        sys.exit()
+                    # self.player.move(self.level_mtx)
+
+                    if pressed_key[pygame.K_r]:
+                        print('reseting the game')
+                        self.level_mtx = LEVELS_MTX.LEVEL_1
+                        self.set_game_mtx()
+
+                    if pressed_key[pygame.K_UP]:
+                        self.player.move()
+
+            pygame.display.flip()
+
+    def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
+        text_font: Font = pygame.font.Font(FONT_MENU, size=text_size)
+        text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
+        text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
+        self.window.blit(source=text_surf, dest=text_rect)
+    
+    def set_game_mtx(self):
         for y, row in enumerate(self.level_mtx):
             for x, tile in enumerate(row):
                 f = Floor('regular', FLOOR[0][0], position=(x * 64, y * 64))
@@ -33,7 +73,8 @@ class Level:
 
                 if tile == 'p1':
                     p = Player(PLAYER[0], (0, 0), 'Player')
-                    self.entity_list.append(p)
+                    self.player = p
+                    self.entity_list.append(self.player)
                     print('positioning player')
                     p.rect.left = x * 64
                     p.rect.top = y * 64
@@ -76,30 +117,3 @@ class Level:
                             t = BOX[0][1]
                     box = Box('BOX', t, position=(x * 64, y * 64))
                     self.entity_list.append(box)
-
-        while True:
-            self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))
-
-            for entity in self.entity_list:
-                self.window.blit(source=entity.surf, dest=entity.rect)
-            # 
-            for event in pygame.event.get():
-
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-                if event.type == pygame.KEYDOWN:
-                    pressed_key = pygame.key.get_pressed()
-                    if pressed_key[pygame.K_ESCAPE]:
-                        pygame.quit()
-                        sys.exit()
-                    # self.player.move(self.level_mtx)
-
-            pygame.display.flip()
-
-    def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
-        text_font: Font = pygame.font.Font(FONT_MENU, size=text_size)
-        text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
-        text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
-        self.window.blit(source=text_surf, dest=text_rect)
