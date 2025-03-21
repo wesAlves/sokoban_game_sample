@@ -5,7 +5,8 @@ from pygame import Surface, Rect
 from pygame.font import Font
 
 from game import LEVELS_MTX
-from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL
+from game.Box import Box
+from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL, BOX
 from game.Floor import Floor
 from game.Player import Player
 from game.Wall import Wall
@@ -63,6 +64,18 @@ class Level:
                     w = Wall('regular', t, position=(x * 64, y * 64))
 
                     self.entity_list.append(w)
+
+                if tile.startswith('b'):
+                    t = BOX[0][0]
+                    match tile:
+                        case 'bm':
+                            t = BOX[0][0]
+                        case 'bp':
+                            t = BOX[0][1]
+                        case 'bot':
+                            t = BOX[0][1]
+                    box = Box('BOX', t, position=(x * 64, y * 64))
+                    self.entity_list.append(box)
 
         while True:
             self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))
