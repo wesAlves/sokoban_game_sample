@@ -19,6 +19,7 @@ class Level:
         self.game_mode = game_mode
         self.entity_list = []
         self.level_mtx = LEVELS_MTX.LEVEL_1
+        self.player_level = self.level_mtx
         self.player = ""
         # self.player = Player(PLAYER[0], (0, 0), 'Player')
         # self.entity_list.append(self.player)
@@ -54,8 +55,29 @@ class Level:
                         self.level_mtx = LEVELS_MTX.LEVEL_1
                         self.set_game_mtx()
 
+                    # get player position in all directions
+                    player_pos = self.player.rect
+
                     if pressed_key[pygame.K_UP]:
-                        self.player.move()
+                        if player_pos.top > 64:
+                            self.player.rect.top = player_pos.top - 64
+                    if pressed_key[pygame.K_DOWN]:
+                        if player_pos.top < 640:
+                            self.player.rect.top = player_pos.top + 64
+
+                    if pressed_key[pygame.K_RIGHT]:
+                        if player_pos.left < 640 - 128:
+                            self.player.rect.left = player_pos.left + 64
+
+                    if pressed_key[pygame.K_LEFT]:
+                        if player_pos.left > 64:
+                            self.player.rect.left = player_pos.left - 64
+
+                        # verify if is a valid move
+                        # update the matix if so
+                        # update the screen
+
+                        # self.player.move()
 
             pygame.display.flip()
 
@@ -64,20 +86,12 @@ class Level:
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
         self.window.blit(source=text_surf, dest=text_rect)
-    
+
     def set_game_mtx(self):
         for y, row in enumerate(self.level_mtx):
             for x, tile in enumerate(row):
                 f = Floor('regular', FLOOR[0][0], position=(x * 64, y * 64))
                 self.entity_list.append(f)
-
-                if tile == 'p1':
-                    p = Player(PLAYER[0], (0, 0), 'Player')
-                    self.player = p
-                    self.entity_list.append(self.player)
-                    print('positioning player')
-                    p.rect.left = x * 64
-                    p.rect.top = y * 64
 
                 if tile.startswith('w'):
                     t = WALL[0]
@@ -117,3 +131,11 @@ class Level:
                             t = BOX[0][1]
                     box = Box('BOX', t, position=(x * 64, y * 64))
                     self.entity_list.append(box)
+
+                if tile == 'p1':
+                    p = Player(PLAYER[0], (0, 0), 'Player')
+                    self.player = p
+                    self.entity_list.append(self.player)
+                    print('positioning player')
+                    p.rect.left = x * 64
+                    p.rect.top = y * 64
