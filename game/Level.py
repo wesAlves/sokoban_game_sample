@@ -186,7 +186,7 @@ class Level:
                 b_pos = self.player_level[to_y + 1][to_x]
                 l_pos = self.player_level[to_y][to_x - 1]
 
-                if not t_pos.startswith('w') and not b_pos.startswith('w'):
+                if not t_pos.startswith('w') and not b_pos.startswith('w') and not t_pos.startswith('s') and not b_pos.startswith('s'):
                     if from_y < to_y:
                         self.player_level[to_y][to_x] = player_pos
                         self.player_level[to_y + 1][to_x] = desire_pos if b_pos != "bp" else 'bot'
@@ -196,7 +196,7 @@ class Level:
                         self.player_level[to_y - 1][to_x] = desire_pos if t_pos != "bp" else 'bot'
                         self.player_level[from_y][from_x] = ""
 
-                if not r_pos.startswith('w') and not l_pos.startswith('w'):
+                if not r_pos.startswith('w') and not l_pos.startswith('w') and not r_pos.startswith('s') and not l_pos.startswith('s'):
                     if from_x < to_x:
                         self.player_level[to_y][to_x] = player_pos
                         self.player_level[to_y][to_x + 1] = desire_pos if r_pos != "bp" else 'bot'
