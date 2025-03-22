@@ -160,35 +160,44 @@ class Level:
 
         if desire_pos == "" or desire_pos == "bm" or desire_pos == "bp":
             print('can move')
-            self.player_level[to_y][to_x] = player_pos
+            # self.player_level[to_y][to_x] = player_pos
 
             if desire_pos is "bp":
                 self.player_level[to_y][to_x] = player_pos
                 self.prev_element = desire_pos
                 self.player_level[from_y][from_x] = ""
             elif desire_pos is "bm":
-                self.player_level[from_y][from_x] = ""
-                if from_y < to_y and not self.player_level[to_y + 2][to_x].startswith("w"):
-                    self.player_level[to_y][to_x] = player_pos
-                    self.player_level[to_y + 1][to_x] = desire_pos
-                elif from_y > to_y and not self.player_level[to_y - 2][to_x].startswith("w"):
-                    self.player_level[to_y][to_x] = player_pos
-                    self.player_level[to_y - 1][to_x] = desire_pos
+                t_pos = self.player_level[to_y - 1][to_x]
+                r_pos = self.player_level[to_y][to_x + 1]
+                b_pos = self.player_level[to_y + 1][to_x]
+                l_pos = self.player_level[to_y][to_x - 1]
 
-                elif from_x < to_x and not self.player_level[to_y][to_x + 2].startswith("w"):
-                    self.player_level[to_y][to_x] = player_pos
-                    self.player_level[to_y][to_x + 1] = desire_pos
-                elif from_x > to_x and not self.player_level[to_y][to_x - 2].startswith("w"):
-                    self.player_level[to_y][to_x] = player_pos
-                    self.player_level[to_y][to_x - 1] = desire_pos
-                else:
-                    pass
+                if not t_pos.startswith('w') and not b_pos.startswith('w'):
+                    if from_y < to_y:
+                        self.player_level[to_y][to_x] = player_pos
+                        self.player_level[to_y + 1][to_x] = desire_pos
+                        self.player_level[from_y][from_x] = ""
+                    if from_y > to_y:
+                        self.player_level[to_y][to_x] = player_pos
+                        self.player_level[to_y - 1][to_x] = desire_pos
+                        self.player_level[from_y][from_x] = ""
+
+                if not r_pos.startswith('w') and not l_pos.startswith('w'):
+                    if from_x < to_x:
+                        self.player_level[to_y][to_x] = player_pos
+                        self.player_level[to_y][to_x + 1] = desire_pos
+                        self.player_level[from_y][from_x] = ""
+
+                    if from_x > to_x:
+                        self.player_level[to_y][to_x] = player_pos
+                        self.player_level[to_y][to_x - 1] = desire_pos
+                        self.player_level[from_y][from_x] = ""
+
 
             else:
                 self.player_level[to_y][to_x] = player_pos
                 self.player_level[from_y][from_x] = self.prev_element
                 self.prev_element = ""
-
 
             self.set_game_mtx(self.player_level)
 
