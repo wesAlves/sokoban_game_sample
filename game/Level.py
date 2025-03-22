@@ -6,7 +6,7 @@ from pygame.font import Font
 
 from game import LEVELS_MTX
 from game.Box import Box
-from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL, BOX, SHIP
+from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL, BOX, SHIP, MUSIC
 from game.Floor import Floor
 from game.Player import Player
 from game.Wall import Wall
@@ -28,6 +28,9 @@ class Level:
     def run(self):
         self.copy_level_to_level_ref()
         self.set_game_mtx(self.player_level)
+        pygame.mixer_music.load(MUSIC)
+        pygame.mixer_music.play(-1)
+        pygame.mixer_music.set_volume(.15)
 
         while True:
             self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))

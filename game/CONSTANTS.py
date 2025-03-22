@@ -29,7 +29,7 @@ FONT_MENU = ASSETS('fonts/sky.ttf')
 MENU_BG_0 = ASSETS("menu_bg_0.png")
 MENU_BG_1 = ASSETS("menu_bg_1.png")
 
-MENU_OPTION = ('New game', 'Random game', 'Leaderboard', 'Exit')
+MENU_OPTION = ('New game', 'Exit')
 
 # PLAYER
 PLAYER_KEY_UP = {'Player': pygame.K_UP, 'Player2': pygame.K_w}
@@ -76,6 +76,8 @@ SHIP = (
     ASSETS('floors/ship_4.png'),
     ASSETS('floors/ship_5.png'),
 )
+
+MUSIC = (ASSETS('sounds/metroid_dread_burenia.mp3'))
 
 # WINDOW CONSTANTS:
 WIN_WIDTH = 576
