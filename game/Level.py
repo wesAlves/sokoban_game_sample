@@ -1,5 +1,4 @@
 import sys
-from pprint import pprint
 
 import pygame
 from pygame import Surface, Rect
@@ -155,7 +154,8 @@ class Level:
     def verify_valid_move(self, from_x=0, from_y=0, to_x=0, to_y=0):
         player_pos = self.player_level[from_y][from_x]
         desire_pos = self.player_level[to_y][to_x]
-        # check all directions
+
+        # check all directionsr
         # check if is empty space or box or box place
 
         if desire_pos == "" or desire_pos == "bm" or desire_pos == "bp":
@@ -163,30 +163,32 @@ class Level:
             self.player_level[to_y][to_x] = player_pos
 
             if desire_pos is "bp":
+                self.player_level[to_y][to_x] = player_pos
                 self.prev_element = desire_pos
                 self.player_level[from_y][from_x] = ""
             elif desire_pos is "bm":
                 self.player_level[from_y][from_x] = ""
-                if from_y < to_y:
+                if from_y < to_y and not self.player_level[to_y + 2][to_x].startswith("w"):
+                    self.player_level[to_y][to_x] = player_pos
                     self.player_level[to_y + 1][to_x] = desire_pos
-                elif from_y > to_y:
+                elif from_y > to_y and not self.player_level[to_y - 2][to_x].startswith("w"):
+                    self.player_level[to_y][to_x] = player_pos
                     self.player_level[to_y - 1][to_x] = desire_pos
 
-                elif from_x < to_x:
+                elif from_x < to_x and not self.player_level[to_y][to_x + 2].startswith("w"):
+                    self.player_level[to_y][to_x] = player_pos
                     self.player_level[to_y][to_x + 1] = desire_pos
-                else:
+                elif from_x > to_x and not self.player_level[to_y][to_x - 2].startswith("w"):
+                    self.player_level[to_y][to_x] = player_pos
                     self.player_level[to_y][to_x - 1] = desire_pos
+                else:
+                    pass
 
-                # self.player_level[to_x][to_y]
             else:
+                self.player_level[to_y][to_x] = player_pos
                 self.player_level[from_y][from_x] = self.prev_element
                 self.prev_element = ""
 
-            match desire_pos:
-                case 'bm':
-                    pass
-                case 'bp':
-                    pass
 
             self.set_game_mtx(self.player_level)
 
@@ -196,4 +198,4 @@ class Level:
     def copy_level_to_level_ref(self):
         for y, row in enumerate(self.level_mtx):
             for x, tile in enumerate(row):
-                self.player_level[y][x] = tile 
+                self.player_level[y][x] = tile
