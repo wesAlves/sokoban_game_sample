@@ -7,6 +7,7 @@ from pygame.font import Font
 from game import LEVELS_MTX
 from game.Box import Box
 from game.CONSTANTS import WHITE, PLAYER, FLOOR, WALL, BOX, SHIP, MUSIC, WIN_WIDTH
+from game.EndGame import EndGame
 from game.Floor import Floor
 from game.Player import Player
 from game.Wall import Wall
@@ -242,4 +243,5 @@ class Level:
                 self.copy_level_to_level_ref()
                 self.set_game_mtx(self.level_mtx)
             else:
-                print('end game')
+                win = EndGame(self.window)
+                win.run()
