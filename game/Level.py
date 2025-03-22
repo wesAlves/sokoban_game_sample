@@ -1,4 +1,5 @@
 import sys
+from pprint import pprint
 
 import pygame
 from pygame import Surface, Rect
@@ -19,7 +20,7 @@ class Level:
         self.game_mode = game_mode
         self.entity_list = []
         self.level_mtx = LEVELS_MTX.LEVEL_1
-        self.player_level = self.level_mtx
+        self.player_level = LEVELS_MTX.LEVEL_REF
         self.player = ""
         self.prev_element = ""
         # self.player = Player(PLAYER[0], (0, 0), 'Player')
@@ -29,7 +30,8 @@ class Level:
         # self.entity_list.append(self.f)
 
     def run(self):
-        self.set_game_mtx()
+        self.copy_level_to_level_ref()
+        self.set_game_mtx(self.player_level)
 
         while True:
             self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))
@@ -52,9 +54,8 @@ class Level:
                     # self.player.move(self.level_mtx)
 
                     if pressed_key[pygame.K_r]:
-                        print('reseting the game')
-                        self.level_mtx = LEVELS_MTX.LEVEL_1
-                        self.set_game_mtx()
+                        self.set_game_mtx(self.level_mtx)
+                        self.copy_level_to_level_ref()
 
                     # get player position in all directions
                     player_pos = self.player.rect
@@ -95,8 +96,10 @@ class Level:
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
         self.window.blit(source=text_surf, dest=text_rect)
 
-    def set_game_mtx(self, mtx=None):
-        level_mtx = mtx if mtx else self.level_mtx
+    def set_game_mtx(self, mtx):
+        level_mtx = mtx
+        self.entity_list = []
+
         for y, row in enumerate(level_mtx):
             for x, tile in enumerate(row):
                 f = Floor('regular', FLOOR[0][0], position=(x * 64, y * 64))
@@ -189,3 +192,8 @@ class Level:
 
         else:
             print('can not move')
+
+    def copy_level_to_level_ref(self):
+        for y, row in enumerate(self.level_mtx):
+            for x, tile in enumerate(row):
+                self.player_level[y][x] = tile 
