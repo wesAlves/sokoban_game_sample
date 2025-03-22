@@ -1,4 +1,3 @@
-import random
 import sys
 
 import pygame
@@ -24,6 +23,7 @@ class Level:
         self.player = ""
         self.prev_element = ""
         self.ship_wall = []
+        self.current_level = 1
 
     def run(self):
         self.copy_level_to_level_ref()
@@ -47,7 +47,6 @@ class Level:
                     if pressed_key[pygame.K_ESCAPE]:
                         pygame.quit()
                         sys.exit()
-                    # self.player.move(self.level_mtx)
 
                     if pressed_key[pygame.K_r]:
                         self.set_game_mtx(self.level_mtx)
@@ -60,29 +59,19 @@ class Level:
 
                     if pressed_key[pygame.K_UP]:
                         if player_pos.top > 64:
-                            # self.player.rect.top = player_pos.top - 64
                             self.verify_valid_move(x, y, x, y - 1)
 
                     if pressed_key[pygame.K_DOWN]:
                         if player_pos.top < 640:
-                            # self.player.rect.top = player_pos.top + 64
                             self.verify_valid_move(x, y, x, y + 1)
 
                     if pressed_key[pygame.K_RIGHT]:
                         if player_pos.left < 640 - 128:
-                            # self.player.rect.left = player_pos.left + 64
                             self.verify_valid_move(x, y, x + 1, y)
 
                     if pressed_key[pygame.K_LEFT]:
                         if player_pos.left > 64:
-                            # self.player.rect.left = player_pos.left - 64
                             self.verify_valid_move(x, y, x - 1, y)
-
-                        # verify if is a valid move
-                        # update the matix if so
-                        # update the screen
-
-                        # self.player.move()
 
             pygame.display.flip()
 
@@ -170,11 +159,7 @@ class Level:
         player_pos = self.player_level[from_y][from_x]
         desire_pos = self.player_level[to_y][to_x]
 
-        # check all directionsr
-        # check if is empty space or box or box place
-
         if desire_pos == "" or desire_pos == "bm" or desire_pos == "bp":
-            # self.player_level[to_y][to_x] = player_pos
 
             if desire_pos is "bp":
                 self.player_level[to_y][to_x] = player_pos
@@ -186,7 +171,8 @@ class Level:
                 b_pos = self.player_level[to_y + 1][to_x]
                 l_pos = self.player_level[to_y][to_x - 1]
 
-                if not t_pos.startswith('w') and not b_pos.startswith('w') and not t_pos.startswith('s') and not b_pos.startswith('s'):
+                if not t_pos.startswith('w') and not b_pos.startswith('w') and not t_pos.startswith(
+                        's') and not b_pos.startswith('s'):
                     if from_y < to_y:
                         self.player_level[to_y][to_x] = player_pos
                         self.player_level[to_y + 1][to_x] = desire_pos if b_pos != "bp" else 'bot'
@@ -196,7 +182,8 @@ class Level:
                         self.player_level[to_y - 1][to_x] = desire_pos if t_pos != "bp" else 'bot'
                         self.player_level[from_y][from_x] = ""
 
-                if not r_pos.startswith('w') and not l_pos.startswith('w') and not r_pos.startswith('s') and not l_pos.startswith('s'):
+                if not r_pos.startswith('w') and not l_pos.startswith('w') and not r_pos.startswith(
+                        's') and not l_pos.startswith('s'):
                     if from_x < to_x:
                         self.player_level[to_y][to_x] = player_pos
                         self.player_level[to_y][to_x + 1] = desire_pos if r_pos != "bp" else 'bot'
@@ -241,7 +228,14 @@ class Level:
                         boxes_position[index] = True
 
         if all(boxes_position):
-            print('level complete, moving to new level')
-            self.level_mtx = LEVELS_MTX.LEVEL_2
-            self.copy_level_to_level_ref()
-            self.set_game_mtx(self.level_mtx)
+            self.current_level += 1
+            if self.current_level <= 3:
+                match self.current_level:
+                    case 2:
+                        self.level_mtx = LEVELS_MTX.LEVEL_2
+                    case 3:
+                        self.level_mtx = LEVELS_MTX.LEVEL_3
+                self.copy_level_to_level_ref()
+                self.set_game_mtx(self.level_mtx)
+            else:
+                print('end game')
