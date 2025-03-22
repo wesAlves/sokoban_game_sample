@@ -41,7 +41,9 @@ PLAYER_KEY_SHOT = {'Player': pygame.K_RCTRL, 'Player2': pygame.K_LCTRL}
 # TILES
 BOX = (
     (ASSETS('floors/box_1_obj.png'),
-     ASSETS('floors/box_1_place.png')),)
+     ASSETS('floors/box_1_place.png'),
+     ASSETS('floors/box_1_on_target.png'),
+     ),)
 FLOOR = (
     (
         ASSETS('floors/floor_0_1.png'),

@@ -147,7 +147,7 @@ class Level:
                         case 'bp':
                             t = BOX[0][1]
                         case 'bot':
-                            t = BOX[0][1]
+                            t = BOX[0][2]
                     box = Box('BOX', t, position=(x * 64, y * 64))
                     self.entity_list.append(box)
 
