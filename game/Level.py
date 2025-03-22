@@ -101,8 +101,9 @@ class Level:
 
         for y, row in enumerate(level_mtx):
             for x, tile in enumerate(row):
-                f = Floor('regular', FLOOR[0][0], position=(x * 64, y * 64))
-                self.entity_list.append(f)
+                if tile is not 's':
+                    f = Floor('regular', FLOOR[0][0], position=(x * 64, y * 64))
+                    self.entity_list.append(f)
 
                 if tile.startswith('w'):
                     t = WALL[0]
