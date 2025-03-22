@@ -16,6 +16,7 @@ GREEN_YELLOW = hex_to_rgb("#eafb52ff")
 PALE_GREEN_YELLOW = hex_to_rgb("#eafb52ff")
 PRIMARY_COLOR = hex_to_rgb("#55ACEE")
 WHITE = hex_to_rgb("#FFFFFFFF")
+TRANSPARENT_WHITE = hex_to_rgb("#8888ACFF")
 
 # ENTITY_SPEED
 ENTITY_SPEED = {

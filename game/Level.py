@@ -6,7 +6,7 @@ from pygame.font import Font
 
 from game import LEVELS_MTX
 from game.Box import Box
-from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL, BOX, SHIP, MUSIC
+from game.CONSTANTS import WHITE, PLAYER, FLOOR, WALL, BOX, SHIP, MUSIC, WIN_WIDTH
 from game.Floor import Floor
 from game.Player import Player
 from game.Wall import Wall
@@ -33,11 +33,8 @@ class Level:
         pygame.mixer_music.set_volume(.15)
 
         while True:
-            self.level_text(14, f'Level name{self.name}', WHITE, (10, 5))
-
             for entity in self.entity_list:
                 self.window.blit(source=entity.surf, dest=entity.rect)
-            # 
 
             for event in pygame.event.get():
                 pressed_key = pygame.key.get_pressed()
@@ -76,10 +73,14 @@ class Level:
                         if player_pos.left > 64:
                             self.verify_valid_move(x, y, x - 1, y)
 
+            self.level_text(24, "RU: 4596063", WHITE, (24, 24))
+            self.level_text(18, f'Level {self.current_level}', WHITE, (24, 5))
+
             pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
-        text_font: Font = pygame.font.Font(FONT_MENU, size=text_size)
+        # text_font: Font = pygame.font.Font(FONT_MENU, size=text_size)
+        text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
         self.window.blit(source=text_surf, dest=text_rect)
@@ -186,7 +187,7 @@ class Level:
                         self.player_level[from_y][from_x] = ""
 
                 if not r_pos.startswith('w') and not l_pos.startswith('w') and not r_pos.startswith(
-                        's') and not l_pos.startswith('s') and not r_pos == 'bm' and not l_pos =='bm':
+                        's') and not l_pos.startswith('s') and not r_pos == 'bm' and not l_pos == 'bm':
                     if from_x < to_x:
                         self.player_level[to_y][to_x] = player_pos
                         self.player_level[to_y][to_x + 1] = desire_pos if r_pos != "bp" else 'bot'

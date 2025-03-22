@@ -3,7 +3,7 @@ from pygame import Surface, Rect
 from pygame.font import Font
 
 from game.CONSTANTS import WIN_WIDTH, MENU_BG_0, FONT_MENU, GREEN, BLUE, WIN_HEIGHT, \
-    MENU_OPTION, GREEN_YELLOW, PALE_BLUE, WHITE
+    MENU_OPTION, GREEN_YELLOW, PALE_BLUE, WHITE, TRANSPARENT_WHITE
 
 
 class Menu:
@@ -22,12 +22,12 @@ class Menu:
             self.menu_text(24, "Sokoban odyssey", GREEN, ((WIN_WIDTH / 2), 168))
             
             
-            self.menu_text(12, "Instruções:", WHITE, ((WIN_WIDTH / 2), 224))
-            self.menu_text(12, "Pressione R para resetar o Level", WHITE, ((WIN_WIDTH / 2), 248))
-            self.menu_text(12, "Pressione ESC para sair do jogo", WHITE, ((WIN_WIDTH / 2), 264))
+            self.menu_text(24, "Instruções:", TRANSPARENT_WHITE, ((WIN_WIDTH / 2), 224), 'x')
+            self.menu_text(24, "Pressione R para resetar o Level", TRANSPARENT_WHITE, ((WIN_WIDTH / 2), 248), 'x')
+            self.menu_text(24, "Pressione ESC para sair do jogo", TRANSPARENT_WHITE, ((WIN_WIDTH / 2), 264), 'x')
             
-            self.menu_text(12, "Desenvolvido por: ", WHITE, ((WIN_WIDTH / 2), 320))
-            self.menu_text(24, "RU: 4596063", WHITE, ((WIN_WIDTH / 2), 360))
+            self.menu_text(24, "Desenvolvido por: ", TRANSPARENT_WHITE, ((WIN_WIDTH / 2), 320), "x")
+            self.menu_text(32, "RU: 4596063", WHITE, ((WIN_WIDTH / 2), 360), "x")
 
             for i in range(len(MENU_OPTION)):
                 if i == menu_option:
@@ -60,8 +60,11 @@ class Menu:
                     if event.key == pygame.K_RETURN:
                         return MENU_OPTION[menu_option]
 
-    def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
-        text_font: Font = pygame.font.Font(FONT_MENU, size=text_size)
+    def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple, font=None):
+        if font:
+            text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
+        else:
+            text_font: Font = pygame.font.Font(FONT_MENU, size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)
         self.window.blit(source=text_surf, dest=text_rect)
