@@ -22,11 +22,6 @@ class Level:
         self.player_level = LEVELS_MTX.LEVEL_REF
         self.player = ""
         self.prev_element = ""
-        # self.player = Player(PLAYER[0], (0, 0), 'Player')
-        # self.entity_list.append(self.player)
-        # self.base_floor_tile = Floor('base')
-        # self.f = Floor('regular', FLOOR[0][0], position=(64, 64))
-        # self.entity_list.append(self.f)
 
     def run(self):
         self.copy_level_to_level_ref()
@@ -96,6 +91,7 @@ class Level:
         self.window.blit(source=text_surf, dest=text_rect)
 
     def set_game_mtx(self, mtx):
+        self.verify_is_solved()
         level_mtx = mtx
         self.entity_list = []
 
@@ -159,7 +155,6 @@ class Level:
                     p = Player(PLAYER[0], (0, 0), 'Player')
                     self.player = p
                     self.entity_list.append(self.player)
-                    print('positioning player')
                     p.rect.left = x * 64
                     p.rect.top = y * 64
 
@@ -171,7 +166,6 @@ class Level:
         # check if is empty space or box or box place
 
         if desire_pos == "" or desire_pos == "bm" or desire_pos == "bp":
-            print('can move')
             # self.player_level[to_y][to_x] = player_pos
 
             if desire_pos is "bp":
@@ -187,22 +181,22 @@ class Level:
                 if not t_pos.startswith('w') and not b_pos.startswith('w'):
                     if from_y < to_y:
                         self.player_level[to_y][to_x] = player_pos
-                        self.player_level[to_y + 1][to_x] = desire_pos
+                        self.player_level[to_y + 1][to_x] = desire_pos if b_pos != "bp" else 'bot'
                         self.player_level[from_y][from_x] = ""
                     if from_y > to_y:
                         self.player_level[to_y][to_x] = player_pos
-                        self.player_level[to_y - 1][to_x] = desire_pos
+                        self.player_level[to_y - 1][to_x] = desire_pos if t_pos != "bp" else 'bot'
                         self.player_level[from_y][from_x] = ""
 
                 if not r_pos.startswith('w') and not l_pos.startswith('w'):
                     if from_x < to_x:
                         self.player_level[to_y][to_x] = player_pos
-                        self.player_level[to_y][to_x + 1] = desire_pos
+                        self.player_level[to_y][to_x + 1] = desire_pos if r_pos != "bp" else 'bot'
                         self.player_level[from_y][from_x] = ""
 
                     if from_x > to_x:
                         self.player_level[to_y][to_x] = player_pos
-                        self.player_level[to_y][to_x - 1] = desire_pos
+                        self.player_level[to_y][to_x - 1] = desire_pos if l_pos != "bp" else 'bot'
                         self.player_level[from_y][from_x] = ""
 
 
@@ -220,3 +214,27 @@ class Level:
         for y, row in enumerate(self.level_mtx):
             for x, tile in enumerate(row):
                 self.player_level[y][x] = tile
+
+    def verify_is_solved(self):
+        target_position = []
+        boxes_position = []
+
+        for y, row in enumerate(self.level_mtx):
+            for x, tile in enumerate(row):
+                if tile == 'bp':
+                    target_position.append([y, x])
+                    boxes_position.append(False)
+
+        for y, row in enumerate(self.player_level):
+            for x, tile in enumerate(row):
+                if tile == "bot":
+                    if target_position.__contains__([y, x]):
+                        index = target_position.index([y, x])
+                        boxes_position[index] = True
+                        
+
+        if all(boxes_position):
+            print('level complete, moving to new level')
+            self.level_mtx = LEVELS_MTX.LEVEL_2
+            self.copy_level_to_level_ref()
+            self.set_game_mtx(self.level_mtx)
