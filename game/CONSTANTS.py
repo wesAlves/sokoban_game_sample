@@ -69,6 +69,14 @@ WALL = (
 
 )
 
+SHIP = (
+    ASSETS('floors/ship_1.png'),
+    ASSETS('floors/ship_2.png'),
+    ASSETS('floors/ship_3.png'),
+    ASSETS('floors/ship_4.png'),
+    ASSETS('floors/ship_5.png'),
+)
+
 # WINDOW CONSTANTS:
-WIN_WIDTH = 640
-WIN_HEIGHT = 640
+WIN_WIDTH = 576
+WIN_HEIGHT = 576

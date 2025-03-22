@@ -1,3 +1,4 @@
+import random
 import sys
 
 import pygame
@@ -6,7 +7,7 @@ from pygame.font import Font
 
 from game import LEVELS_MTX
 from game.Box import Box
-from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL, BOX
+from game.CONSTANTS import FONT_MENU, WHITE, PLAYER, FLOOR, WALL, BOX, SHIP
 from game.Floor import Floor
 from game.Player import Player
 from game.Wall import Wall
@@ -22,6 +23,7 @@ class Level:
         self.player_level = LEVELS_MTX.LEVEL_REF
         self.player = ""
         self.prev_element = ""
+        self.ship_wall = []
 
     def run(self):
         self.copy_level_to_level_ref()
@@ -151,6 +153,12 @@ class Level:
                     box = Box('BOX', t, position=(x * 64, y * 64))
                     self.entity_list.append(box)
 
+                if tile.startswith('s'):
+                    t = SHIP[int(tile.split("_")[1])]
+                    w = Wall('ship', t, position=(x * 64, y * 64))
+                    self.ship_wall.append(w)
+                    self.entity_list.append(w)
+
                 if tile == 'p1':
                     p = Player(PLAYER[0], (0, 0), 'Player')
                     self.player = p
@@ -231,7 +239,6 @@ class Level:
                     if target_position.__contains__([y, x]):
                         index = target_position.index([y, x])
                         boxes_position[index] = True
-                        
 
         if all(boxes_position):
             print('level complete, moving to new level')
