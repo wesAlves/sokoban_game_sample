@@ -19,7 +19,7 @@ WHITE = hex_to_rgb("#FFFFFFFF")
 
 # ENTITY_SPEED
 ENTITY_SPEED = {
-    "Player":1
+    "Player": 1
 }
 
 # FONT
@@ -38,8 +38,7 @@ PLAYER_KEY_LEFT = {'Player': pygame.K_LEFT, 'Player2': pygame.K_a}
 PLAYER_KEY_RIGHT = {'Player': pygame.K_RIGHT, 'Player2': pygame.K_d}
 PLAYER_KEY_SHOT = {'Player': pygame.K_RCTRL, 'Player2': pygame.K_LCTRL}
 
-
-#TILES
+# TILES
 BOX = (
     (ASSETS('floors/box_1_obj.png'),
      ASSETS('floors/box_1_place.png')),)
@@ -53,14 +52,19 @@ FLOOR = (
 )
 PLAYER = (ASSETS('player/idle_player.png'),)
 WALL = (
-    ASSETS('floors/w_h_t.png'),
-    ASSETS('floors/w_h_b.png'),
-    ASSETS('floors/w_v_l.png'),
-    ASSETS('floors/w_v_r.png'),
-    ASSETS('floors/w_t_l.png'),
-    ASSETS('floors/w_t_r.png'),
-    ASSETS('floors/w_b_l.png'),
-    ASSETS('floors/w_b_r.png')
+    ASSETS('floors/w_h_t.png'),  # 0
+    ASSETS('floors/w_h_b.png'),  # 1
+    ASSETS('floors/w_v_l.png'),  # 2
+    ASSETS('floors/w_v_r.png'),  # 3
+    ASSETS('floors/w_t_l.png'),  # 4
+    ASSETS('floors/w_t_r.png'),  # 5
+    ASSETS('floors/w_b_l.png'),  # 6
+    ASSETS('floors/w_b_r.png'),  # 7
+    ASSETS('floors/w_i_b_r.png'),  # 8
+    ASSETS('floors/w_i_b_l.png'),  # 9
+    ASSETS('floors/w_i_t_r.png'),  # 10
+    ASSETS('floors/w_i_t_l.png')  # 11
+
 )
 
 # WINDOW CONSTANTS:

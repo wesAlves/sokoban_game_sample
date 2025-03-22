@@ -128,6 +128,17 @@ class Level:
                         case 'wvl':
                             t = WALL[2]
 
+                        case 'wibr':
+                            t = WALL[8]
+                        case 'wibl':
+                            t = WALL[9]
+
+                        case 'witr':
+                            t = WALL[10]
+
+                        case 'witl':
+                            t = WALL[11]
+
                     w = Wall('regular', t, position=(x * 64, y * 64))
 
                     self.entity_list.append(w)
